@@ -22,7 +22,6 @@ var getArtist = function(name) {
     return getFromApi('search', query)
     .then(result => {
     	artist = result.artists.items[0];
-    	console.log(artist);
     	return artist;
     })
     .catch(function(err) {
@@ -32,7 +31,16 @@ var getArtist = function(name) {
     	return getFromApi(`artists/${artist.id}/related-artists`)
     	.then(item => {
     		artist.related = item.artists;
-    		return artist;
+        var artistHits = artist.related.map(hit => {
+          return getFromApi(`artists/${hit.id}/top-tracks?country=us`); 
+          
+        });
+        return Promise.all(artistHits).then(items => {
+          items.forEach((songs, index) =>{
+            artist.related[index].tracks = songs.tracks;
+          });
+          return artist;
+        })
     	})
     })
 };
