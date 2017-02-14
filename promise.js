@@ -45,21 +45,6 @@ var getArtist = function(name) {
     })
 };
 
-// const url = new URL('https://www.omdbapi.com/');
-// const data = {
-//     s: 'office space',
-//     r:'json'
-// };
-// Object.keys(data).forEach(key => url.searchParams.append(key, data[key]));
 
-// fetch(url).then(response => {
-//   if (!response.ok) {
-//     return Promise.reject(response.statusText);
-//   }
-//   return response.json();
-// }).then(response => {
-//   console.log(response.Search[0].Title);
-// }).catch(err => {
-//   console.error(err);
-// });
+
 
