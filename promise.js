@@ -1,4 +1,4 @@
-var getFromApi = function(endpoint, query) {
+var getFromApi = function(endpoint, query={}) {
     const url = new URL(`https://api.spotify.com/v1/${endpoint}`);
     Object.keys(query).forEach(key => url.searchParams.append(key, query[key]));
     return fetch(url).then(function(response) {
@@ -12,5 +12,46 @@ var getFromApi = function(endpoint, query) {
 
 var artist;
 var getArtist = function(name) {
-    // Edit me!
+    
+    query = {
+    	q: name,
+    	limit: 1,
+    	type: 'artist'
+    }
+
+    return getFromApi('search', query)
+    .then(result => {
+    	artist = result.artists.items[0];
+    	console.log(artist);
+    	return artist;
+    })
+    .catch(function(err) {
+    	console.error(err);
+    })
+    .then(() => {
+    	return getFromApi(`artists/${artist.id}/related-artists`)
+    	.then(item => {
+    		artist.related = item.artists;
+    		return artist;
+    	})
+    })
 };
+
+// const url = new URL('https://www.omdbapi.com/');
+// const data = {
+//     s: 'office space',
+//     r:'json'
+// };
+// Object.keys(data).forEach(key => url.searchParams.append(key, data[key]));
+
+// fetch(url).then(response => {
+//   if (!response.ok) {
+//     return Promise.reject(response.statusText);
+//   }
+//   return response.json();
+// }).then(response => {
+//   console.log(response.Search[0].Title);
+// }).catch(err => {
+//   console.error(err);
+// });
+
